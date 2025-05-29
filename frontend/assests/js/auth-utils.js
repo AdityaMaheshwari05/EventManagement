@@ -1,9 +1,3 @@
-// auth-utils.js - Shared authentication functions
-
-/**
- * Verifies if current user is an organizer
- * @returns {boolean}
- */
 export function verifyOrganizer() {
   // First check localStorage user data
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -22,11 +16,6 @@ export function verifyOrganizer() {
   }
 }
 
-/**
- * Shows an alert message
- * @param {string} message
- * @param {string} type
- */
 export function showAlert(message, type) {
   // Remove existing alerts
   const existingAlert = document.querySelector(".alert");
