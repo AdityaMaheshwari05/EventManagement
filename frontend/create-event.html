@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Event - EventMS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assests/css/style.css" />
+    <!-- Include Flatpickr for date/time picker -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <!-- Add this in the head section -->
+    <style>
+      .alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10000;
+        transition: all 0.3s ease;
+      }
+
+      .alert-success {
+        background-color: #4bb543;
+      }
+
+      .alert-error {
+        background-color: #ff3333;
+      }
+
+      .alert.fade-out {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <a href="index.html" class="logo">Event<span>MS</span></a>
+        <div class="nav-links">
+          <a href="events.html">Browse Events</a>
+          <a href="create-event.html">Create Event</a>
+          <a href="my-events.html">My Events</a>
+          <a href="my-bookings.html">My Bookings</a>
+          <div class="auth-buttons">
+            <a href="login.html" class="btn btn-outline">Login</a>
+            <a href="register.html" class="btn btn-primary">Register</a>
+          </div>
+          <div class="user-dropdown hidden">
+            <button class="user-profile">
+              <i class="fa-duotone fa-solid fa-user" id="user-avatar"></i>
+              <span id="user-name"></span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu">
+              <a href="my-bookings.html">My Bookings</a>
+              <a href="my-events.html">My Events</a>
+              <a href="#" id="logout-btn">Logout</a>
+            </div>
+          </div>
+        </div>
+        <button class="hamburger">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Create Event Section -->
+    <section class="create-event">
+      <div class="container">
+        <div class="page-header">
+          <h1>Create New Event</h1>
+          <a href="my-events.html" class="btn btn-outline">Back to My Events</a>
+        </div>
+
+        <form id="event-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="title">Event Title</label>
+              <input
+                type="text"
+                id="title"
+                placeholder="Enter event title"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" required>
+                <option value="">Select a category</option>
+                <option value="CONFERENCE">Conference</option>
+                <option value="WORKSHOP">Workshop</option>
+                <option value="SEMINAR">Seminar</option>
+                <option value="MUSIC">Music</option>
+                <option value="SPORTS">Sports</option>
+                <option value="ART">Art</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="date-time">Date & Time</label>
+              <input
+                type="text"
+                id="date-time"
+                placeholder="Select date and time"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="max-slots">Maximum Attendees</label>
+              <input
+                type="number"
+                id="max-slots"
+                min="1"
+                placeholder="Enter maximum number of attendees"
+                required
+              />
+            </div>
+
+            <div class="form-group span-2">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                rows="5"
+                placeholder="Enter event description"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group span-2">
+              <label for="image">Event Image</label>
+              <input type="file" id="image" accept="image/*" />
+              <small>Upload an image for your event (optional)</small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="cancel-btn">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Create Event</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-about">
+            <h3>EventMS</h3>
+            <p>
+              Connecting people through amazing events. Find, create, and manage
+              events with ease.
+            </p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="events.html">Browse Events</a></li>
+              <li><a href="create-event.html">Create Event</a></li>
+              <li><a href="login.html">Login</a></li>
+              <li><a href="register.html">Register</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h3>Contact Us</h3>
+            <ul>
+              <li><i class="fas fa-envelope"></i> support@eventms.com</li>
+              <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 EventMS. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./assests/js/main.js"></script>
+    <script src="./assests/js/auth.js"></script>
+    <script src="./assests/js/create-event.js"></script>
+    <!-- Include Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </body>
+</html>

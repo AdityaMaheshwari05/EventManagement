@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventMS - Discover Amazing Events</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assests/css/style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <a href="./index.html" class="logo">Event<span>MS</span></a>
+        <div class="nav-links">
+          <a href="./events.html">Browse Events</a>
+          <a href="create-event.html">Create Event</a>
+          <a href="my-events.html">My Events</a>
+          <a href="my-bookings.html">My Bookings</a>
+          <div class="auth-buttons">
+            <a href="login.html" class="btn btn-outline">Login</a>
+            <a href="register.html" class="btn btn-primary">Register</a>
+          </div>
+          <div class="user-dropdown hidden">
+            <button class="user-profile">
+              <i class="fa-duotone fa-solid fa-user" id="user-avatar"></i>
+              <span id="user-name"></span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu">
+              <a href="my-bookings.html">My Bookings</a>
+              <a href="my-events.html">My Events</a>
+              <a href="#" id="logout-btn">Logout</a>
+            </div>
+          </div>
+        </div>
+        <button class="hamburger">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Discover & Create Unforgettable Events</h1>
+          <p>
+            Join thousands of people attending and organizing amazing events
+            near you.
+          </p>
+          <div class="hero-buttons">
+            <a href="events.html" class="btn btn-primary">Browse Events</a>
+            <a href="create-event.html" class="btn btn-outline1"
+              >Create Event</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Events -->
+    <section class="featured-events">
+      <div class="container">
+        <h2>Featured Events</h2>
+        <div class="events-grid" id="featured-events">
+          <!-- loaded via JavaScript -->
+        </div>
+        <a href="events.html" class="btn btn-outline view-all"
+          >View All Events</a
+        >
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+      <div class="container">
+        <h2>Browse by Category</h2>
+        <div class="categories-grid">
+          <a href="events.html?category=CONFERENCE" class="category-card">
+            <i class="fas fa-users"></i>
+            <h3>Conferences</h3>
+          </a>
+          <a href="events.html?category=WORKSHOP" class="category-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>Workshops</h3>
+          </a>
+          <a href="events.html?category=SEMINAR" class="category-card">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h3>Seminars</h3>
+          </a>
+          <a href="events.html?category=MUSIC" class="category-card">
+            <i class="fas fa-music"></i>
+            <h3>Music</h3>
+          </a>
+          <a href="events.html?category=SPORTS" class="category-card">
+            <i class="fas fa-running"></i>
+            <h3>Sports</h3>
+          </a>
+          <a href="events.html?category=ART" class="category-card">
+            <i class="fas fa-palette"></i>
+            <h3>Art</h3>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-about">
+            <h3>EventMS</h3>
+            <p>
+              Connecting people through amazing events. Find, create, and manage
+              events with ease.
+            </p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="./events.html">Browse Events</a></li>
+              <li><a href="./create-event.html">Create Event</a></li>
+              <li><a href="./login.html">Login</a></li>
+              <li><a href="./register.html">Register</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h3>Contact Us</h3>
+            <ul>
+              <li><i class="fas fa-envelope"></i> support@eventms.com</li>
+              <li><i class="fas fa-phone"></i> +91 123-4567</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 EventMS. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./assests/js/main.js"></script>
+    <script src="./assests/js/auth.js"></script>
+  </body>
+</html>

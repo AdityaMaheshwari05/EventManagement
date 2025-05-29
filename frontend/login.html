@@ -1,0 +1,51 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - EventMS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assests/css/style.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <form id="login-form" class="auth-form">
+        <h2>Login to Your Account</h2>
+
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required />
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block">
+          <span id="login-btn-text">Login</span>
+          <span id="login-spinner" class="spinner hidden"
+            ><i class="fas fa-spinner fa-spin"></i
+          ></span>
+        </button>
+
+        <div class="auth-footer">
+          <p>
+            Don't have an account? <a href="register.html">Register here</a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <script src="./assests/js/auth.js" defer></script>
+    <script src="./assests/js/main.js" defer></script>
+  </body>
+</html>
