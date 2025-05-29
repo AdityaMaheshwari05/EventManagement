@@ -1,9 +1,7 @@
 function showAlert(message, type) {
-  // Remove existing alerts
   const existingAlert = document.querySelector(".alert");
   if (existingAlert) existingAlert.remove();
 
-  // Create alert element
   const alert = document.createElement("div");
   alert.className = `alert alert-${type}`;
   alert.innerHTML = `
@@ -13,10 +11,8 @@ function showAlert(message, type) {
 
   document.body.appendChild(alert);
 
-  // Auto-remove after 5 seconds
   const autoRemove = setTimeout(() => alert.remove(), 5000);
 
-  // Manual close
   alert.querySelector(".close-alert").addEventListener("click", () => {
     clearTimeout(autoRemove);
     alert.remove();
@@ -25,48 +21,54 @@ function showAlert(message, type) {
 
 window.getUserRole = function () {
   try {
-    console.log("Checking user role...");
-
-    // 1. First check localStorage user data
     const userData = localStorage.getItem("user");
-    console.log("User data from localStorage:", userData);
-
     if (userData) {
       const user = JSON.parse(userData);
-      console.log("Parsed user object:", user);
-      if (user.role) {
-        console.log("Role from user object:", user.role);
-        return user.role;
-      }
+      if (user.role) return user.role;
     }
 
-    // 2. Fallback to token verification
     const token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token ? "exists" : "missing");
-
     if (token) {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      console.log("Token payload:", payload);
-      const role = payload.role || "ATTENDEE";
-      console.log("Role from token:", role);
-      return role;
+      return payload.role || "ATTENDEE";
     }
   } catch (e) {
     console.error("Role verification error:", e);
   }
-
-  console.log("Defaulting to ATTENDEE role");
   return "ATTENDEE";
 };
 
 window.verifyOrganizer = function () {
   const role = window.getUserRole();
-  console.log("Verified role:", role);
   return role === "ORGANIZER";
 };
 
+function isEmailValid(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function isPasswordValid(password) {
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;
+  return passwordRegex.test(password);
+}
+
 async function login(email, password) {
   try {
+    if (!isEmailValid(email)) {
+      showAlert("Invalid email address.", "error");
+      return { success: false };
+    }
+
+    if (!isPasswordValid(password)) {
+      showAlert(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.",
+        "error"
+      );
+      return { success: false };
+    }
+
     const response = await fetch("http://localhost:8080/api/auth/login", {
       method: "POST",
       headers: {
@@ -75,20 +77,23 @@ async function login(email, password) {
       body: JSON.stringify({ email, password }),
     });
 
+    const contentType = response.headers.get("Content-Type");
+
+    let data = {};
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      throw new Error("Invalid response format");
+    }
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Login failed");
+      throw new Error("Login failed");
     }
 
-    const data = await response.json();
-    console.log("Full login response:", data);
-
-    // Verify response structure
     if (!data.token || !data.email || !data.role) {
-      throw new Error("Invalid response format from server");
+      throw new Error("Missing login data");
     }
 
-    // Store all user data
     const user = {
       email: data.email,
       role: data.role,
@@ -96,20 +101,37 @@ async function login(email, password) {
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", data.token);
 
-    // Verify token payload
-    const payload = JSON.parse(atob(data.token.split(".")[1]));
-    console.log("Token payload:", payload);
-
     return { success: true, user, token: data.token };
   } catch (error) {
     console.error("Login error:", error);
-    showAlert(error.message, "error");
-    return { success: false, error: "Incorrect Credentials" };
+    let errorMessage = "Login failed. Please check your credentials.";
+    try {
+      const text = await response.text();
+      errorMessage = text || errorMessage;
+    } catch (e) {
+      console.error("Error parsing login failure response:", e);
+    }
+    showAlert(errorMessage, "error");
+
+    return { success: false };
   }
 }
 
 async function register(email, password, role) {
   try {
+    if (!isEmailValid(email)) {
+      showAlert("Invalid email address.", "error");
+      return { success: false };
+    }
+
+    if (!isPasswordValid(password)) {
+      showAlert(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.",
+        "error"
+      );
+      return { success: false };
+    }
+
     const response = await fetch("http://localhost:8080/api/auth/signup", {
       method: "POST",
       headers: {
@@ -118,15 +140,31 @@ async function register(email, password, role) {
       body: JSON.stringify({ email, password, role }),
     });
 
+    const contentType = response.headers.get("Content-Type");
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Registration failed");
+      let errorMessage = "Registration failed. Please try again.";
+      try {
+        if (contentType && contentType.includes("application/json")) {
+          const errData = await response.json();
+          errorMessage = errData.message || errorMessage;
+        } else {
+          const text = await response.text();
+          errorMessage = text || errorMessage;
+        }
+      } catch (e) {
+        console.error("Error parsing error message:", e);
+      }
+
+      showAlert(errorMessage, "error");
+      return { success: false };
     }
 
     return { success: true };
   } catch (error) {
     console.error("Registration error:", error);
-    return { success: false, error: error.message };
+    showAlert("Registration failed. Please check the input.", "error");
+    return { success: false };
   }
 }
 
@@ -142,7 +180,6 @@ function setupLoginForm() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
-    // Set loading state
     const originalText = loginBtn.innerHTML;
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
@@ -155,13 +192,10 @@ function setupLoginForm() {
         setTimeout(() => {
           window.location.href = "index.html";
         }, 1500);
-      } else {
-        showAlert(result.error || "Login failed", "error");
       }
     } catch (error) {
       showAlert("An unexpected error occurred", "error");
     } finally {
-      // Reset button state
       loginBtn.disabled = false;
       loginBtn.innerHTML = originalText;
     }
@@ -181,7 +215,6 @@ function setupRegistrationForm() {
     const password = document.getElementById("register-password").value;
     const role = document.getElementById("register-role").value;
 
-    // Set loading state
     const originalText = registerBtn.innerHTML;
     registerBtn.disabled = true;
     registerBtn.innerHTML =
@@ -198,13 +231,10 @@ function setupRegistrationForm() {
         setTimeout(() => {
           window.location.href = "login.html";
         }, 2000);
-      } else {
-        showAlert(result.error || "Registration failed", "error");
       }
     } catch (error) {
       showAlert("An unexpected error occurred", "error");
     } finally {
-      // Reset button state
       registerBtn.disabled = false;
       registerBtn.innerHTML = originalText;
     }
@@ -212,7 +242,6 @@ function setupRegistrationForm() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Add spinner animation style
   const style = document.createElement("style");
   style.textContent = `
       .alert {
@@ -230,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         justify-content: space-between;
         max-width: 400px;
       }
-      
+
       .alert-success {
         background-color: #4BB543;
       }
@@ -238,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .alert-error {
         background-color: #FF3333;
       }
-      
+
       .close-alert {
         background: none;
         border: none;
@@ -247,12 +276,12 @@ document.addEventListener("DOMContentLoaded", () => {
         cursor: pointer;
         margin-left: 15px;
       }
-      
+
       .fa-spinner {
         margin-right: 8px;
         animation: fa-spin 1s infinite linear;
       }
-      
+
       @keyframes fa-spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(359deg); }
@@ -260,7 +289,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   document.head.appendChild(style);
 
-  // Setup forms
   setupLoginForm();
   setupRegistrationForm();
 });

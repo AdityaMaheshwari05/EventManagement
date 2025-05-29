@@ -27,6 +27,21 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        if (!isValidEmail(request.email())) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        // Check if email already exists
+        if (userRepository.findByEmail(request.email()).isPresent()) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
+        // Validate password strength
+        if (!isPasswordValid(request.password())) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
+        }
+
+
         //Set the default role to USER if not provided
         Role defaultRole = request.role() != null ? request.role() : Role.ATTENDEE;
 
@@ -50,5 +65,15 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         return new AuthResponse(jwtToken, user.getEmail(), user.getRole());
+    }
+
+    private boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email != null && email.matches(regex);
+    }
+
+    private boolean isPasswordValid(String password) {
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#^])[A-Za-z\\d@$!%*?&#^]{8,}$";
+        return password != null && password.matches(regex);
     }
 }
