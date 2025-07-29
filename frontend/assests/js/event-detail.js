@@ -293,9 +293,7 @@ function initMap() {
   if (!mapContainer) return;
 
   try {
-    // Replace with your actual Mapbox access token
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
+    mapboxgl.accessToken = "";
 
     // Only initialize map if we have a valid token
     if (!mapboxgl.accessToken || mapboxgl.accessToken === "YOUR_MAPBOX_TOKEN") {

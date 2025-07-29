@@ -24,11 +24,10 @@ public class EventService {
     }
 
     public Event createEvent(Event event, User organizer) {
-        event.setOrganizer(organizer);
+//        event.setOrganizer(organizer);
         if (organizer == null) {
             throw new IllegalArgumentException("Organizer cannot be null");
         }
-
         event.setOrganizer(organizer);
         event.setAvailableSlots(event.getMaxSlots());
 

@@ -34,12 +34,12 @@ async function loadEvents(page = 1, filters = {}) {
     // Safely handle filters
     if (filters?.category)
       params.append("category", filters.category.toUpperCase());
-    if (filters?.fromDate) {
-      const dateObj = new Date(filters.fromDate);
-      if (!isNaN(dateObj.getTime())) {
-        params.append("fromDate", dateObj.toISOString().split("T")[0]);
-      }
-    }
+    // if (filters?.fromDate) {
+    //   const dateObj = new Date(filters.fromDate);
+    //   if (!isNaN(dateObj.getTime())) {
+    //     params.append("fromDate", dateObj.toISOString().split("T")[0]);
+    //   }
+    // }
     if (filters?.searchQuery) params.append("query", filters.searchQuery);
 
     url += params.toString();
@@ -238,5 +238,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("category-filter").value = category;
   }
 
-  loadEvents(currentPage, category, fromDate);
+  const filters = {
+    category,
+    fromDate,
+  };
+  loadEvents(currentPage, filters);
 });

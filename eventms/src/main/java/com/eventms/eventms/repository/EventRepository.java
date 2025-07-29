@@ -30,11 +30,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.isCancelled = true")
     List<Event> findCancelledEvents();
 
-    List<Event> findByAvailableSlots(int slots);
-    List<Event> findByCategoryAndDateTimeAfter(
-            EventCategory category,
-            LocalDateTime fromDate
-    );
+//    List<Event> findByAvailableSlots(int slots);
+//    List<Event> findByCategoryAndDateTimeAfter(
+//            EventCategory category,
+//            LocalDateTime fromDate
+//    );
 
     @Query("SELECT e FROM Event e WHERE " +
             "(COALESCE(:category, NULL) IS NULL OR e.category = :category) AND " +
